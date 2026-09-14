@@ -66,7 +66,11 @@ Open [http://localhost:3000](http://localhost:3000). Add `?lang=en` to any page 
 
 ### Environment variables
 
-All variables are optional.
+All variables are optional. To set them, copy the example file:
+
+```bash
+cp .env.example .env.local
+```
 
 | Variable                   | Description                                                                 |
 | -------------------------- | --------------------------------------------------------------------------- |
