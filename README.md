@@ -7,6 +7,7 @@ A fast, accurate Khmer lunar calendar (ចន្ទគតិ / Chhankitek) — a
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tested with Vitest](https://img.shields.io/badge/tested%20with-vitest-6E9F18?logo=vitest&logoColor=white)](https://vitest.dev)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#contributing)
 
 [Features](#features) · [Getting started](#getting-started) · [API](#rest-api) · [Contributing](#contributing)
@@ -144,4 +145,4 @@ Contributions are welcome — bug reports, date corrections, translations and co
 
 ## License
 
-See [LICENSE](LICENSE). The bundled Dangrek font is licensed separately under the SIL Open Font License 1.1.
+[MIT](LICENSE) © 2026 Penh Seyha. The bundled Dangrek font is licensed separately under the SIL Open Font License 1.1.
