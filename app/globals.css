@@ -1,26 +1,431 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Khmer Lunar design tokens: see design-system.md for the visual language.
+ *
+ *   1. Primitives  raw palette, radius, shadow and motion values. Never used in components.
+ *   2. Semantic    purpose roles (shadcn roles + brand, emphasis, status, calendar meanings,
+ *                  elevation). Light values on :root, dark overrides on .dark.
+ *   3. Component   tokens for app-specific pieces (immersive hero, calendar cell, code, scrollbar).
+ *
+ * Components reach tokens only through the Tailwind utilities mapped in @theme.
+ */
+
+/* ======================================================================
+   1. PRIMITIVES
+   ====================================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand blue: #00518D is blue-600 */
+  --blue-50: oklch(0.97 0.015 249.5);
+  --blue-100: oklch(0.935 0.035 249.5);
+  --blue-200: oklch(0.87 0.065 249.5);
+  --blue-300: oklch(0.78 0.095 249.5);
+  --blue-400: oklch(0.66 0.12 249.5);
+  --blue-500: oklch(0.54 0.13 249.5);
+  --blue-600: oklch(0.427 0.12 249.5);
+  --blue-700: oklch(0.36 0.1 249.5);
+  --blue-800: oklch(0.29 0.08 249.5);
+  --blue-900: oklch(0.23 0.06 249.5);
+  --blue-950: oklch(0.17 0.04 249.5);
+
+  /* Accent red: #EA1D24 is red-500 (large text / decorative only; small text uses red-600) */
+  --red-50: oklch(0.97 0.015 27);
+  --red-100: oklch(0.935 0.04 27);
+  --red-300: oklch(0.79 0.13 27);
+  --red-400: oklch(0.7 0.19 27);
+  --red-500: oklch(0.598 0.232 27);
+  --red-600: oklch(0.54 0.2 27);
+  --red-700: oklch(0.46 0.17 27);
+
+  /* Cool blue-gray neutrals */
+  --slate-50: oklch(0.985 0.004 255);
+  --slate-100: oklch(0.965 0.007 255);
+  --slate-200: oklch(0.925 0.011 255);
+  --slate-300: oklch(0.87 0.016 255);
+  --slate-400: oklch(0.71 0.022 255);
+  --slate-500: oklch(0.56 0.026 255);
+  --slate-600: oklch(0.46 0.028 255);
+  --slate-700: oklch(0.37 0.028 255);
+  --slate-800: oklch(0.28 0.024 255);
+  --slate-850: oklch(0.235 0.022 255);
+  --slate-900: oklch(0.2 0.02 255);
+  --slate-950: oklch(0.15 0.016 255);
+
+  /* Supporting hues: charts, tags, calendar meanings */
+  --teal-100: oklch(0.94 0.04 185);
+  --teal-400: oklch(0.75 0.11 185);
+  --teal-600: oklch(0.55 0.1 185);
+  --teal-700: oklch(0.47 0.085 185);
+  --amber-50: oklch(0.975 0.025 70);
+  --amber-100: oklch(0.95 0.05 70);
+  --amber-400: oklch(0.82 0.15 70);
+  --amber-500: oklch(0.76 0.16 70);
+  --amber-700: oklch(0.54 0.13 70);
+  --amber-800: oklch(0.47 0.11 70);
+  --violet-100: oklch(0.94 0.035 295);
+  --violet-400: oklch(0.7 0.13 295);
+  --violet-600: oklch(0.52 0.16 295);
+  --rose-400: oklch(0.72 0.14 10);
+  --rose-600: oklch(0.56 0.18 10);
+
+  --white: oklch(1 0 0);
+
+  /* Radius: ~10px base; sm 6 · md 8 · lg 10 · xl 14 (derived in @theme) */
+  --radius: 0.625rem;
+
+  /* Soft, low shadows tinted with the neutral hue */
+  --soft-shadow-1: 0 1px 2px oklch(0.2 0.02 255 / 0.05), 0 1px 3px oklch(0.2 0.02 255 / 0.05);
+  --soft-shadow-2: 0 10px 28px -8px oklch(0.2 0.02 255 / 0.18), 0 2px 6px -2px oklch(0.2 0.02 255 / 0.08);
+  --soft-shadow-3: 0 18px 40px -16px oklch(0.23 0.06 249.5 / 0.45);
+
+  /* Motion: short, ease-out, no overshoot */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 250ms;
+  --motion-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ======================================================================
+   2. SEMANTIC (light)
+   ====================================================================== */
+:root {
+  /* Surfaces: page → raised card → floating popover */
+  --background: var(--slate-50);
+  --foreground: var(--slate-900);
+  --card: var(--white);
+  --card-foreground: var(--slate-900);
+  --popover: var(--white);
+  --popover-foreground: var(--slate-900);
+
+  /* Actions */
+  --primary: var(--blue-600);
+  --primary-foreground: var(--white);
+  --secondary: var(--slate-100);
+  --secondary-foreground: var(--slate-800);
+  --muted: var(--slate-100);
+  --muted-foreground: var(--slate-600);
+  --accent: var(--blue-50);
+  --accent-foreground: var(--blue-700);
+  --destructive: var(--red-600);
+
+  /* Lines & focus */
+  --border: var(--slate-200);
+  --input: var(--slate-300);
+  --ring: var(--blue-500);
+
+  /* Brand & emphasis */
+  --brand: var(--blue-600);
+  --brand-foreground: var(--white);
+  --emphasis: var(--red-600);
+  --emphasis-strong: var(--red-500);
+
+  /* Status */
+  --success: var(--teal-700);
+  --success-soft: var(--teal-100);
+  --warning: var(--amber-800);
+  --warning-soft: var(--amber-100);
+  --info: var(--blue-600);
+  --info-soft: var(--blue-50);
+
+  /* Calendar meanings (always paired with a label, dot shape or icon) */
+  --holy: var(--amber-800);
+  --holy-soft: var(--amber-50);
+  --holy-mark: var(--amber-500);
+  --holiday: var(--red-600);
+  --holiday-soft: var(--red-50);
+  --holiday-solid: var(--red-600);
+  --holiday-solid-foreground: var(--white);
+  --observance: var(--violet-600);
+  --observance-soft: var(--violet-100);
+  --moon: var(--amber-500);
+
+  /* Elevation tiers */
+  --elevation-raised: var(--soft-shadow-1);
+  --elevation-floating: var(--soft-shadow-2);
+  --elevation-immersive: var(--soft-shadow-3);
+
+  /* Data & charts */
+  --chart-1: var(--blue-500);
+  --chart-2: var(--teal-600);
+  --chart-3: var(--amber-500);
+  --chart-4: var(--violet-600);
+  --chart-5: var(--rose-600);
+
+  --selection: oklch(0.54 0.13 249.5 / 20%);
+
+  --sidebar: var(--white);
+  --sidebar-foreground: var(--slate-900);
+  --sidebar-primary: var(--blue-600);
+  --sidebar-primary-foreground: var(--white);
+  --sidebar-accent: var(--blue-50);
+  --sidebar-accent-foreground: var(--blue-700);
+  --sidebar-border: var(--slate-200);
+  --sidebar-ring: var(--blue-500);
+}
+
+/* ======================================================================
+   2. SEMANTIC (dark)
+   ====================================================================== */
+.dark {
+  --background: var(--slate-950);
+  --foreground: var(--slate-100);
+  --card: var(--slate-900);
+  --card-foreground: var(--slate-100);
+  --popover: var(--slate-850);
+  --popover-foreground: var(--slate-100);
+
+  --primary: var(--blue-300);
+  --primary-foreground: var(--blue-950);
+  --secondary: var(--slate-800);
+  --secondary-foreground: var(--slate-100);
+  --muted: var(--slate-800);
+  --muted-foreground: var(--slate-400);
+  --accent: oklch(0.54 0.13 249.5 / 18%);
+  --accent-foreground: var(--blue-200);
+  --destructive: var(--red-400);
+
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--blue-400);
+
+  --brand: var(--blue-300);
+  --brand-foreground: var(--blue-950);
+  --emphasis: var(--red-400);
+  --emphasis-strong: var(--red-400);
+
+  --success: var(--teal-400);
+  --success-soft: oklch(0.75 0.11 185 / 14%);
+  --warning: var(--amber-400);
+  --warning-soft: oklch(0.82 0.15 70 / 14%);
+  --info: var(--blue-300);
+  --info-soft: oklch(0.54 0.13 249.5 / 18%);
+
+  --holy: var(--amber-400);
+  --holy-soft: oklch(0.82 0.15 70 / 12%);
+  --holy-mark: var(--amber-400);
+  --holiday: var(--red-400);
+  --holiday-soft: oklch(0.7 0.19 27 / 14%);
+  --holiday-solid: var(--red-600);
+  --holiday-solid-foreground: var(--white);
+  --observance: var(--violet-400);
+  --observance-soft: oklch(0.7 0.13 295 / 16%);
+  --moon: var(--amber-400);
+
+  --elevation-raised: 0 1px 2px oklch(0 0 0 / 0.35);
+  --elevation-floating: 0 12px 32px -8px oklch(0 0 0 / 0.55), 0 0 0 1px oklch(1 0 0 / 6%);
+  --elevation-immersive: 0 18px 40px -16px oklch(0 0 0 / 0.7);
+
+  --chart-1: var(--blue-400);
+  --chart-2: var(--teal-400);
+  --chart-3: var(--amber-400);
+  --chart-4: var(--violet-400);
+  --chart-5: var(--rose-400);
+
+  --selection: oklch(0.66 0.12 249.5 / 30%);
+
+  --sidebar: var(--slate-900);
+  --sidebar-foreground: var(--slate-100);
+  --sidebar-primary: var(--blue-300);
+  --sidebar-primary-foreground: var(--blue-950);
+  --sidebar-accent: oklch(0.54 0.13 249.5 / 18%);
+  --sidebar-accent-foreground: var(--blue-200);
+  --sidebar-border: oklch(1 0 0 / 9%);
+  --sidebar-ring: var(--blue-400);
+}
+
+/* ======================================================================
+   3. COMPONENT
+   ====================================================================== */
+:root {
+  /* Immersive brand surface (Today hero, New Year card) */
+  --hero-from: var(--blue-700);
+  --hero-to: var(--blue-600);
+  --hero-foreground: var(--white);
+  --hero-muted: var(--blue-100);
+  --hero-accent: var(--amber-400);
+  --hero-accent-foreground: var(--blue-950);
+  --hero-chip: oklch(1 0 0 / 12%);
+  --hero-chip-foreground: var(--white);
+
+  /* Calendar day cell */
+  --cell-bg: var(--background);
+  --cell-hover: var(--accent);
+  --cell-selected: var(--accent);
+  --cell-today-ring: var(--brand);
+  --cell-outside: var(--muted-foreground);
+
+  /* Code blocks */
+  --code-bg: var(--slate-900);
+  --code-foreground: var(--slate-100);
+
+  /* Scrollbars */
+  --scrollbar-thumb: var(--slate-300);
+}
+
+.dark {
+  --hero-from: var(--blue-800);
+  --hero-to: var(--blue-700);
+  --hero-muted: var(--blue-200);
+  --hero-chip: oklch(1 0 0 / 10%);
+
+  --code-bg: var(--slate-950);
+  --scrollbar-thumb: var(--slate-700);
+}
+
+/* ======================================================================
+   Tailwind mapping
+   ====================================================================== */
 @theme inline {
+  --font-sans: var(--font-jakarta), var(--font-kantumruy), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-dangrek), var(--font-kantumruy), ui-sans-serif, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-emphasis: var(--emphasis);
+  --color-emphasis-strong: var(--emphasis-strong);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-holy: var(--holy);
+  --color-holy-soft: var(--holy-soft);
+  --color-holy-mark: var(--holy-mark);
+  --color-holiday: var(--holiday);
+  --color-holiday-soft: var(--holiday-soft);
+  --color-holiday-solid: var(--holiday-solid);
+  --color-holiday-solid-foreground: var(--holiday-solid-foreground);
+  --color-observance: var(--observance);
+  --color-observance-soft: var(--observance-soft);
+  --color-moon: var(--moon);
+
+  --color-hero-from: var(--hero-from);
+  --color-hero-to: var(--hero-to);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-muted: var(--hero-muted);
+  --color-hero-accent: var(--hero-accent);
+  --color-hero-accent-foreground: var(--hero-accent-foreground);
+  --color-hero-chip: var(--hero-chip);
+  --color-hero-chip-foreground: var(--hero-chip-foreground);
+  --color-cell: var(--cell-bg);
+  --color-cell-hover: var(--cell-hover);
+  --color-cell-selected: var(--cell-selected);
+  --color-cell-today: var(--cell-today-ring);
+  --color-cell-outside: var(--cell-outside);
+  --color-code: var(--code-bg);
+  --color-code-foreground: var(--code-foreground);
+
+  --shadow-raised: var(--elevation-raised);
+  --shadow-floating: var(--elevation-floating);
+  --shadow-immersive: var(--elevation-immersive);
+
+  --ease-standard: var(--motion-ease);
+  --default-transition-duration: var(--duration-normal);
+  --default-transition-timing-function: var(--motion-ease);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ======================================================================
+   Base
+   ====================================================================== */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+  }
+  html {
+    @apply font-sans;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  ::selection {
+    background-color: var(--selection);
+  }
+  /* Khmer script needs taller lines and never takes letter-spacing */
+  :lang(km) {
+    line-height: 1.7;
+    letter-spacing: normal;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Page titles and hero lines: Dangrek for Khmer (single weight), Jakarta semibold for Latin */
+@utility display-type {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  &:lang(km) {
+    font-weight: 400;
+    letter-spacing: normal;
+  }
+}
+
+/* Filters, tabs, table headers, stat labels */
+@utility micro-label {
+  font-size: var(--text-2xs);
+  line-height: var(--text-2xs--line-height);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  &:lang(km) {
+    letter-spacing: normal;
+  }
 }

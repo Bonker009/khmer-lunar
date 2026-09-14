@@ -1,69 +1,92 @@
-import Image from "next/image";
+import { ArrowRightIcon } from "lucide-react"
+import type { Metadata } from "next"
+import Link from "next/link"
+import { CountdownList } from "@/components/khmer/countdown-list"
+import { MonthGrid } from "@/components/khmer/month-grid"
+import { TodayHero } from "@/components/khmer/today-hero"
+import { YearProgress } from "@/components/khmer/year-progress"
+import { JsonLd } from "@/components/seo/json-ld"
+import { buttonVariants } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { serializeCountdown, serializeMonthCalendar } from "@/lib/api/views"
+import { seoCopy } from "@/lib/i18n/seo"
+import { getServerDictionary, getServerLang } from "@/lib/i18n/server"
+import { dayOfYear, getLunarDate, getMonthCalendar, serializeLunarDate, todayISO } from "@/lib/khmer"
+import { pageMetadata } from "@/lib/seo"
+import { absoluteUrl, localizedPath, SITE_NAME } from "@/lib/site"
 
-export default function Home() {
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = await getServerLang()
+  return pageMetadata({ path: "/", lang, ...seoCopy("home", lang), absoluteTitle: true })
+}
+
+export default async function HomePage() {
+  const { lang, t } = await getServerDictionary()
+  const copy = seoCopy("home", lang)
+  const today = todayISO()
+  const lunar = getLunarDate(today)
+  const calendar = serializeMonthCalendar(getMonthCalendar(lunar.year, lunar.month), lang)
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="space-y-6">
+      <h1 className="sr-only">{copy.title}</h1>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: SITE_NAME[lang],
+          url: absoluteUrl(localizedPath("/", lang)),
+          description: copy.description,
+          inLanguage: lang,
+          applicationCategory: "UtilitiesApplication",
+          operatingSystem: "Any",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        }}
+      />
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-start">
+        <TodayHero data={serializeLunarDate(lunar, lang)} />
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h2>{t.home.upcoming}</h2>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CountdownList events={serializeCountdown(today, lang).slice(0, 6)} />
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h2>
+                {t.home.thisMonth} · {calendar.monthName} {t.num(calendar.year)}
+              </h2>
+            </CardTitle>
+            <CardDescription>{calendar.lunarMonths.map((m) => m.name).join(" – ")}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <MonthGrid calendar={calendar} today={today} compact />
+            <Link href="/calendar" className={buttonVariants({ variant: "outline", size: "sm" })}>
+              {t.home.openCalendar}
+              <ArrowRightIcon data-icon="inline-end" />
+            </Link>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h2>{t.home.progress}</h2>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <YearProgress data={dayOfYear(today)} />
+          </CardContent>
+        </Card>
+      </div>
     </div>
-  );
+  )
 }
