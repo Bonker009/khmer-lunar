@@ -8,7 +8,11 @@ export const alt = "ប្រតិទិនចន្ទគតិ · Khmer Lunar
 export const size = { width: 1200, height: 630 }
 export const contentType = "image/png"
 
-/** Shared social preview, rendered with the brand immersive surface. */
+/**
+ * Shared social preview, rendered with the brand immersive surface.
+ * Latin text only: next/og can't shape Khmer subscript consonants (e.g. ប្រ, ន្ទ),
+ * so Khmer would render incorrectly. The Khmer name lives in the alt text.
+ */
 export default async function OpengraphImage() {
   const dangrek = await readFile(join(process.cwd(), "assets/fonts/Dangrek-Regular.ttf"))
 
@@ -27,13 +31,10 @@ export default async function OpengraphImage() {
           fontFamily: "Dangrek",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <MoonMark size={96} radius={22} />
-          <div style={{ fontSize: 40 }}>Khmer Lunar</div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ fontSize: 88, lineHeight: 1.35 }}>ប្រតិទិនចន្ទគតិ</div>
-          <div style={{ fontSize: 48, color: BRAND_COLORS.amber400 }}>Khmer Lunar Calendar</div>
+        <MoonMark size={120} radius={28} />
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ fontSize: 96, lineHeight: 1.1 }}>Khmer Lunar Calendar</div>
+          <div style={{ fontSize: 40, color: BRAND_COLORS.amber400 }}>Chanthakati · Cambodia</div>
           <div style={{ fontSize: 30, color: BRAND_COLORS.blue100 }}>
             Lunar dates · Holy days · Holidays · Khmer New Year · Free API
           </div>

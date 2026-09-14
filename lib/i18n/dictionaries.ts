@@ -17,6 +17,7 @@ const km = {
     convert: "បំប្លែង",
     count: "រាប់ថ្ងៃ",
     holidays: "ថ្ងៃបុណ្យ",
+    learn: "ស្វែងយល់",
     docs: "API",
   },
   common: {
@@ -163,6 +164,7 @@ const en: Dictionary = {
     convert: "Convert",
     count: "Day count",
     holidays: "Holidays",
+    learn: "Learn",
     docs: "API",
   },
   common: {

@@ -37,6 +37,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/", "daily", 1, today),
     entry("/calendar", "daily", 0.9, today),
     entry("/holidays", "weekly", 0.9),
+    entry("/learn", "monthly", 0.8),
     entry("/convert", "monthly", 0.7),
     entry("/count", "monthly", 0.7),
     entry("/docs", "monthly", 0.5),

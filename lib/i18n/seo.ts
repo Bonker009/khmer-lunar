@@ -8,9 +8,21 @@ export interface PageCopy {
   description: string
 }
 
-type Page = "home" | "calendar" | "convert" | "count" | "holidays" | "docs"
+type Page = "home" | "calendar" | "convert" | "count" | "holidays" | "docs" | "learn"
 
 const COPY: Record<Page, Record<Lang, PageCopy>> = {
+  learn: {
+    km: {
+      title: "ចន្ទគតិខ្មែរ ជាអ្វី? – អត្ថន័យ កើត រោច ថ្ងៃសីល ស័ក និងឆ្នាំសត្វ",
+      description:
+        "ស្វែងយល់ពីប្រតិទិនចន្ទគតិខ្មែរ៖ កើត និងរោច ខែទាំង ១២ អធិកមាស ចន្ទ្រាធិមាស ថ្ងៃសីល ពុទ្ធសករាជ ចុល្លសករាជ ស័ក ឆ្នាំសត្វ និងបុណ្យចូលឆ្នាំខ្មែរ។",
+    },
+    en: {
+      title: "Khmer Lunar Calendar Explained – Kert, Roech, Holy Days, Sak & Zodiac",
+      description:
+        "How the Khmer lunar calendar works: waxing (kert) and waning (roech) days, the 12 months, leap months and days, Buddhist holy days, Buddhist Era, sak, animal years and Khmer New Year.",
+    },
+  },
   home: {
     km: {
       title: "ប្រតិទិនខ្មែរថ្ងៃនេះ – ថ្ងៃខែចន្ទគតិ ថ្ងៃសីល និងថ្ងៃបុណ្យ",

@@ -53,11 +53,8 @@ export async function generateMetadata(): Promise<Metadata> {
       locale: lang === "km" ? "km_KH" : "en_US",
     },
     twitter: { card: "summary_large_image" },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
-    },
+    // index/follow are the defaults; leaving them out lets not-found pages carry a lone noindex.
+    robots: { googleBot: { "max-image-preview": "large", "max-snippet": -1 } },
     appleWebApp: { capable: true, title: "Khmer Lunar", statusBarStyle: "default" },
     ...(process.env.GOOGLE_SITE_VERIFICATION && {
       verification: { google: process.env.GOOGLE_SITE_VERIFICATION },

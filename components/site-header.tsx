@@ -2,6 +2,7 @@
 
 import {
   ArrowLeftRightIcon,
+  BookOpenIcon,
   CalculatorIcon,
   CalendarDaysIcon,
   CodeXmlIcon,
@@ -28,6 +29,7 @@ const NAV = [
   { href: "/convert", key: "convert", icon: ArrowLeftRightIcon },
   { href: "/count", key: "count", icon: CalculatorIcon },
   { href: "/holidays", key: "holidays", icon: PartyPopperIcon },
+  { href: "/learn", key: "learn", icon: BookOpenIcon },
   { href: "/docs", key: "docs", icon: CodeXmlIcon },
 ] as const
 
