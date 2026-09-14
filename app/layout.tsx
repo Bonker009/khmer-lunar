@@ -1,3 +1,5 @@
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata, Viewport } from "next"
 import { Dangrek, Geist_Mono, Kantumruy_Pro, Plus_Jakarta_Sans } from "next/font/google"
 import { LangLinks } from "@/components/lang-links"
@@ -105,6 +107,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             </div>
           </footer>
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
