@@ -1,15 +1,24 @@
 import type { Lang } from "@/lib/khmer/constants"
 
+/** Returns the origin of `value` (e.g. "https://khmerlunar.com"), or null if it isn't a valid absolute URL. */
+function toOrigin(value: string | undefined) {
+  if (!value?.trim()) return null
+  try {
+    return new URL(value.trim()).origin
+  } catch {
+    return null
+  }
+}
+
 /**
  * Canonical site origin for metadata, the sitemap and structured data.
- * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://khmerlunar.com).
+ * Set NEXT_PUBLIC_SITE_URL in production (e.g. https://khmerlunar.com). A blank or
+ * invalid value falls through, since `new URL("")` in generateMetadata would throw.
  */
-export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000")
-).replace(/\/$/, "")
+export const SITE_URL =
+  toOrigin(process.env.NEXT_PUBLIC_SITE_URL) ??
+  toOrigin(process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`) ??
+  "http://localhost:3000"
 
 export const SITE_NAME: Record<Lang, string> = {
   km: "ប្រតិទិនចន្ទគតិ",
